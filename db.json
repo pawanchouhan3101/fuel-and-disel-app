@@ -35,6 +35,15 @@
       "passwordHash": "1234",
       "role": "User",
       "status": "Active"
+    },
+    {
+      "id": "u_1783072303513",
+      "email": "pawanchouhan@gmail.com",
+      "mobile": "09753034772",
+      "name": "Pawan Chouhan",
+      "passwordHash": "1234",
+      "role": "User",
+      "status": "Active"
     }
   ],
   "vehicles": [
@@ -168,6 +177,21 @@
       "totalKm": 4454300,
       "userId": "u1",
       "vehicleId": "v2"
+    },
+    {
+      "id": "e_1783072405292",
+      "closingKm": 123412,
+      "createdAt": "2026-07-03T09:53:25.292Z",
+      "date": "2026-07-03",
+      "dieselAmount": 100,
+      "dieselLitres": 10,
+      "driverName": "Pawan Chouhan",
+      "openingKm": 13420,
+      "pumpName": "General Pump",
+      "remarks": null,
+      "totalKm": 109992,
+      "userId": "u_1783072303513",
+      "vehicleId": "v1"
     }
   ]
 }

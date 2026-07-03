@@ -1,7 +1,6 @@
 import express from 'express';
 import path from 'path';
 import fs from 'fs';
-import { createServer as createViteServer } from 'vite';
 import * as XLSX from 'xlsx';
 import { getDb, updateDb, User, Vehicle, FuelEntry, getDbStatus } from './src/db/db.js';
 
@@ -783,6 +782,7 @@ app.get('/api/reports/excel', requireAuth, (req: AuthenticatedRequest, res) => {
 
 async function startServer() {
   if (process.env.NODE_ENV !== 'production') {
+    const { createServer: createViteServer } = await import('vite');
     const vite = await createViteServer({
       server: { middlewareMode: true },
       appType: 'spa',
