@@ -780,7 +780,7 @@ app.get('/api/reports/excel', requireAuth, (req: AuthenticatedRequest, res) => {
 
 // --- VITE MIDDLEWARE SETUP ---
 
-const isProduction = process.env.NODE_ENV === 'production';
+const isProduction = process.env.NODE_ENV === 'production' || !!process.env.VERCEL;
 if (isProduction) {
   const distPath = path.join(process.cwd(), 'dist');
   app.use(express.static(distPath));
