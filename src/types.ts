@@ -48,4 +48,4 @@ export interface DashboardTotals {
   totalEntries: number;
 }
 
-export type ActiveTab = 'dashboard' | 'vehicles' | 'users' | 'entries';
+export type ActiveTab = 'dashboard' | 'logs' | 'add-entry' | 'vehicles' | 'users';

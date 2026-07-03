@@ -11,10 +11,11 @@ import {
   X,
   Gauge,
   CreditCard,
+  Calendar,
   User as UserIcon
 } from 'lucide-react';
 import { motion, AnimatePresence } from 'motion/react';
-import { SafeUser, Vehicle, ActiveTab, DashboardTotals } from './types';
+import { SafeUser, Vehicle, ActiveTab, DashboardTotals, FuelEntry } from './types';
 import ToastContainer, { ToastMessage } from './components/Toast';
 import SVGCharts from './components/SVGCharts';
 import VehicleManager from './components/VehicleManager';
@@ -41,6 +42,7 @@ export default function App() {
     totalAmount: 0,
     totalEntries: 0
   });
+  const [entries, setEntries] = useState<FuelEntry[]>([]);
 
   // Data update trigger counters
   const [refreshTrigger, setRefreshTrigger] = useState(0);
@@ -81,9 +83,14 @@ export default function App() {
   useEffect(() => {
     // Check dark mode preference from localStorage
     const savedTheme = localStorage.getItem('theme');
-    if (savedTheme === 'dark' || (!savedTheme && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
+    const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+
+    if (savedTheme === 'dark' || (!savedTheme && prefersDark)) {
       setIsDarkMode(true);
       document.documentElement.classList.add('dark');
+    } else {
+      setIsDarkMode(false);
+      document.documentElement.classList.remove('dark');
     }
 
     const savedToken = localStorage.getItem('fuel_token');
@@ -147,6 +154,16 @@ export default function App() {
         const body = await entriesRes.json();
         if (body.totals) {
           setDashboardStats(body.totals);
+        }
+      }
+
+      if (currentUser?.role === 'Admin') {
+        const adminEntriesRes = await fetch('/api/entries?limit=100', {
+          headers: { 'Authorization': `Bearer ${token}` }
+        });
+        if (adminEntriesRes.ok) {
+          const adminBody = await adminEntriesRes.json();
+          setEntries(adminBody.data || []);
         }
       }
     } catch (err) {
@@ -427,9 +444,9 @@ export default function App() {
       )}
 
       <aside
-        className={`fixed inset-y-0 left-0 w-64 bg-white dark:bg-zinc-900 border-r border-zinc-100 dark:border-zinc-800/80 z-40 transform lg:transform-none lg:static transition-transform duration-300 flex flex-col justify-between ${
+        className={`fixed inset-y-0 left-0 w-64 bg-white dark:bg-zinc-900 border-r border-zinc-100 dark:border-zinc-800/80 z-40 transform transition-transform duration-300 flex flex-col justify-between ${
           isSidebarOpen ? 'translate-x-0' : '-translate-x-full'
-        }`}
+        } lg:static lg:translate-x-0 lg:inset-auto`}
       >
         <div className="flex flex-col flex-1">
           {/* Brand header */}
@@ -463,8 +480,38 @@ export default function App() {
                   : 'text-zinc-500 hover:text-zinc-900 dark:text-zinc-400 dark:hover:text-zinc-200 hover:bg-zinc-50 dark:hover:bg-zinc-800/50'
               }`}
             >
-              <LayoutDashboard className="w-4.5 h-4.5" />
+              <LayoutDashboard className="w-5 h-5" />
               Dashboard
+            </button>
+
+            <button
+              onClick={() => {
+                setActiveTab('add-entry');
+                setIsSidebarOpen(false);
+              }}
+              className={`w-full flex items-center gap-3 px-4 py-2.5 rounded-xl text-sm font-semibold transition-all cursor-pointer ${
+                activeTab === 'add-entry'
+                  ? 'bg-indigo-50 text-indigo-700 dark:bg-indigo-950/40 dark:text-indigo-400'
+                  : 'text-zinc-500 hover:text-zinc-900 dark:text-zinc-400 dark:hover:text-zinc-200 hover:bg-zinc-50 dark:hover:bg-zinc-800/50'
+              }`}
+            >
+              <Fuel className="w-5 h-5" />
+              New Entry
+            </button>
+
+            <button
+              onClick={() => {
+                setActiveTab('logs');
+                setIsSidebarOpen(false);
+              }}
+              className={`w-full flex items-center gap-3 px-4 py-2.5 rounded-xl text-sm font-semibold transition-all cursor-pointer ${
+                activeTab === 'logs'
+                  ? 'bg-indigo-50 text-indigo-700 dark:bg-indigo-950/40 dark:text-indigo-400'
+                  : 'text-zinc-500 hover:text-zinc-900 dark:text-zinc-400 dark:hover:text-zinc-200 hover:bg-zinc-50 dark:hover:bg-zinc-800/50'
+              }`}
+            >
+              <Calendar className="w-5 h-5" />
+              Fuel Logs
             </button>
 
             {/* Admin only: Vehicle registration */}
@@ -480,7 +527,7 @@ export default function App() {
                     : 'text-zinc-500 hover:text-zinc-900 dark:text-zinc-400 dark:hover:text-zinc-200 hover:bg-zinc-50 dark:hover:bg-zinc-800/50'
                 }`}
               >
-                <Truck className="w-4.5 h-4.5" />
+                <Truck className="w-5 h-5" />
                 Fleet Vehicles
               </button>
             )}
@@ -498,7 +545,7 @@ export default function App() {
                     : 'text-zinc-500 hover:text-zinc-900 dark:text-zinc-400 dark:hover:text-zinc-200 hover:bg-zinc-50 dark:hover:bg-zinc-800/50'
                 }`}
               >
-                <Users className="w-4.5 h-4.5" />
+                <Users className="w-5 h-5" />
                 User Accounts
               </button>
             )}
@@ -540,23 +587,15 @@ export default function App() {
               onClick={() => setIsSidebarOpen(true)}
               className="lg:hidden p-1 rounded-lg hover:bg-zinc-100 dark:hover:bg-zinc-800 text-zinc-500 cursor-pointer"
             >
-              <Menu className="w-5.5 h-5.5" />
+              <Menu className="w-5 h-5" />
             </button>
             <h1 className="text-base font-bold text-zinc-900 dark:text-zinc-50 tracking-tight capitalize">
-              {activeTab === 'dashboard' ? `${currentUser.role} Dashboard` : activeTab === 'vehicles' ? 'Fleet Management' : 'System Users'}
+              {activeTab === 'dashboard' ? `${currentUser.role} Dashboard`
+                : activeTab === 'add-entry' ? 'New Fuel Entry'
+                : activeTab === 'logs' ? 'Fuel Logs'
+                : activeTab === 'vehicles' ? 'Fleet Management'
+                : 'System Users'}
             </h1>
-          </div>
-
-          <div className="flex items-center gap-3">
-            {/* Quick database connection and fleet indicators */}
-            {dbStatus && (
-              <div className="hidden sm:flex items-center gap-1.5 text-[10px] font-extrabold uppercase tracking-wider px-2.5 py-1.5 rounded-xl border border-zinc-100 dark:border-zinc-800 bg-zinc-50 dark:bg-zinc-800/40">
-                <span className={`w-1.5 h-1.5 rounded-full ${dbStatus.connected ? 'bg-emerald-500' : 'bg-amber-500'}`} />
-                <span className={dbStatus.connected ? 'text-emerald-600 dark:text-emerald-400' : 'text-amber-600 dark:text-amber-400'}>
-                  {dbStatus.type === 'mongodb' ? 'MongoDB' : 'Local File'}
-                </span>
-              </div>
-            )}
 
             <div className="hidden sm:flex items-center gap-1.5 text-xs text-zinc-400 font-semibold uppercase tracking-wider">
               <span className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse" />
@@ -569,7 +608,7 @@ export default function App() {
               className="p-2 rounded-xl border border-zinc-100 dark:border-zinc-800 hover:bg-zinc-50 dark:hover:bg-zinc-800 text-zinc-500 dark:text-zinc-300 transition-colors cursor-pointer"
               aria-label="Toggle dark mode"
             >
-              {isDarkMode ? <Sun className="w-4.5 h-4.5 text-amber-500" /> : <Moon className="w-4.5 h-4.5" />}
+              {isDarkMode ? <Sun className="w-5 h-5 text-amber-500" /> : <Moon className="w-5 h-5" />}
             </button>
           </div>
         </header>
@@ -695,7 +734,7 @@ export default function App() {
                     </div>
                     <div>
                       <p className="text-xs text-zinc-400 font-semibold uppercase tracking-wider">Total Spent (₹)</p>
-                      <h4 className="text-xl font-extrabold text-zinc-900 dark:text-zinc-50 mt-1 font-mono text-emerald-600 dark:text-emerald-400">
+                      <h4 className="text-xl font-extrabold text-emerald-600 dark:text-emerald-400 mt-1 font-mono">
                         ₹{dashboardStats.totalAmount.toLocaleString()}
                       </h4>
                       <p className="text-[10px] text-zinc-400 mt-0.5 font-semibold">Cumulative financial bill</p>
@@ -704,36 +743,48 @@ export default function App() {
                 </div>
 
                 {/* 2. Admin charts dashboard summary */}
-                {currentUser.role === 'Admin' && (
-                  <SVGCharts entries={dashboardStats.totalEntries > 0 ? vehicles.reduce((acc: any, v) => acc, []) : []} vehicles={vehicles} />
+                {currentUser.role === 'Admin' && entries.length > 0 && (
+                  <SVGCharts entries={entries} vehicles={vehicles} />
                 )}
+              </motion.div>
+            )}
 
-                {/* 3. Fuel entry creation form */}
+            {activeTab === 'add-entry' && (
+              <motion.div
+                key="add-entry"
+                initial={{ opacity: 0, y: 15 }}
+                animate={{ opacity: 1, y: 0 }}
+                exit={{ opacity: 0, y: -15 }}
+              >
                 <FuelEntryForm
                   vehicles={vehicles}
                   currentUser={currentUser}
                   token={token}
-                  onSuccess={handleEntrySubmitSuccess}
+                  onSuccess={() => {
+                    handleEntrySubmitSuccess();
+                    setActiveTab('logs');
+                  }}
                   showToast={showToast}
                 />
+              </motion.div>
+            )}
 
-                {/* 4. Table logs list */}
-                <div className="space-y-4">
-                  <div>
-                    <h3 className="text-base font-bold text-zinc-900 dark:text-zinc-50">Fuel Submission Logs</h3>
-                    <p className="text-xs text-zinc-500 dark:text-zinc-400 mt-0.5">Explore historic odometer, diesel details, and filter reports</p>
-                  </div>
-
-                  <FuelEntryList
-                    currentUser={currentUser}
-                    vehicles={vehicles}
-                    usersList={usersList}
-                    token={token}
-                    refreshTrigger={refreshTrigger}
-                    showToast={showToast}
-                    onRefreshStats={handleRefreshStatsOnly}
-                  />
-                </div>
+            {activeTab === 'logs' && (
+              <motion.div
+                key="logs"
+                initial={{ opacity: 0, y: 15 }}
+                animate={{ opacity: 1, y: 0 }}
+                exit={{ opacity: 0, y: -15 }}
+              >
+                <FuelEntryList
+                  currentUser={currentUser}
+                  vehicles={vehicles}
+                  usersList={usersList}
+                  token={token}
+                  refreshTrigger={refreshTrigger}
+                  showToast={showToast}
+                  onRefreshStats={handleRefreshStatsOnly}
+                />
               </motion.div>
             )}
 
