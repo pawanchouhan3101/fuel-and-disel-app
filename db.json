@@ -1,0 +1,171 @@
+{
+  "users": [
+    {
+      "id": "u1",
+      "name": "Pawan Chouhan",
+      "email": "admin@fuel.com",
+      "mobile": "9876543210",
+      "passwordHash": "admin123",
+      "role": "Admin",
+      "status": "Active",
+      "_id": "6a4773fb4a465f314d8c1f39"
+    },
+    {
+      "id": "u2",
+      "name": "John Driver",
+      "email": "user@fuel.com",
+      "mobile": "9876543211",
+      "passwordHash": "user123",
+      "role": "User",
+      "status": "Active",
+      "_id": "6a4773fb4a465f314d8c1f3a"
+    },
+    {
+      "id": "u3",
+      "name": "Rajesh Kumar",
+      "email": "driver1@fuel.com",
+      "mobile": "9876543212",
+      "passwordHash": "driver123",
+      "role": "User",
+      "status": "Active",
+      "_id": "6a4773fb4a465f314d8c1f3b"
+    },
+    {
+      "id": "u_1783067750612",
+      "name": "Pawan Chouhan",
+      "email": "pawanchouhan3101@gmail.com",
+      "mobile": "09753034772",
+      "passwordHash": "1234",
+      "role": "User",
+      "status": "Active"
+    }
+  ],
+  "vehicles": [
+    {
+      "id": "v1",
+      "vehicleNumber": "MH-12-QW-1234",
+      "vehicleName": "Tata Prima Truck",
+      "status": "Active",
+      "_id": "6a4773fc4a465f314d8c1f3c"
+    },
+    {
+      "id": "v2",
+      "vehicleNumber": "DL-01-AB-5678",
+      "vehicleName": "Ashok Leyland Tipper",
+      "status": "Active",
+      "_id": "6a4773fc4a465f314d8c1f3d"
+    },
+    {
+      "id": "v3",
+      "vehicleNumber": "KA-03-XY-9012",
+      "vehicleName": "Mahindra Blazo 49",
+      "status": "Active",
+      "_id": "6a4773fc4a465f314d8c1f3e"
+    },
+    {
+      "id": "v4",
+      "vehicleNumber": "GJ-01-ZZ-9999",
+      "vehicleName": "Eicher Pro Dumper",
+      "status": "Inactive",
+      "_id": "6a4773fc4a465f314d8c1f3f"
+    }
+  ],
+  "entries": [
+    {
+      "id": "e1",
+      "userId": "u2",
+      "vehicleId": "v1",
+      "date": "2026-05-10",
+      "openingKm": 12000,
+      "closingKm": 12450,
+      "totalKm": 450,
+      "dieselLitres": 110,
+      "dieselAmount": 10450,
+      "pumpName": "Bharat Petroleum, Pune",
+      "driverName": "John Driver",
+      "remarks": "First long trip of May",
+      "createdAt": "2026-05-10T18:00:00.000Z",
+      "_id": "6a4773fc4a465f314d8c1f40"
+    },
+    {
+      "id": "e2",
+      "userId": "u3",
+      "vehicleId": "v2",
+      "date": "2026-05-15",
+      "openingKm": 45000,
+      "closingKm": 45320,
+      "totalKm": 320,
+      "dieselLitres": 80,
+      "dieselAmount": 7600,
+      "pumpName": "Indian Oil, Delhi",
+      "driverName": "Rajesh Kumar",
+      "remarks": "Local delivery",
+      "createdAt": "2026-05-15T19:15:00.000Z",
+      "_id": "6a4773fc4a465f314d8c1f41"
+    },
+    {
+      "id": "e3",
+      "userId": "u2",
+      "vehicleId": "v1",
+      "date": "2026-06-02",
+      "openingKm": 12450,
+      "closingKm": 12980,
+      "totalKm": 530,
+      "dieselLitres": 130,
+      "dieselAmount": 12350,
+      "pumpName": "HP Petrol Pump, Mumbai",
+      "driverName": "John Driver",
+      "remarks": "Good mileage observed",
+      "createdAt": "2026-06-02T17:30:00.000Z",
+      "_id": "6a4773fc4a465f314d8c1f42"
+    },
+    {
+      "id": "e4",
+      "userId": "u3",
+      "vehicleId": "v3",
+      "date": "2026-06-12",
+      "openingKm": 8200,
+      "closingKm": 8850,
+      "totalKm": 650,
+      "dieselLitres": 160,
+      "dieselAmount": 15200,
+      "pumpName": "Reliance Petroleum, Bengaluru",
+      "driverName": "Rajesh Kumar",
+      "remarks": "Highway transit",
+      "createdAt": "2026-06-12T20:00:00.000Z",
+      "_id": "6a4773fc4a465f314d8c1f43"
+    },
+    {
+      "id": "e5",
+      "userId": "u2",
+      "vehicleId": "v2",
+      "date": "2026-06-25",
+      "openingKm": 45320,
+      "closingKm": 45700,
+      "totalKm": 380,
+      "dieselLitres": 95,
+      "dieselAmount": 9025,
+      "pumpName": "Indian Oil, Delhi",
+      "driverName": "John Driver",
+      "remarks": "Heavy rain traffic",
+      "createdAt": "2026-06-25T16:45:00.000Z",
+      "_id": "6a4773fc4a465f314d8c1f44"
+    },
+    {
+      "id": "e6",
+      "userId": "u3",
+      "vehicleId": "v1",
+      "date": "2026-07-01",
+      "openingKm": 12980,
+      "closingKm": 13420,
+      "totalKm": 440,
+      "dieselLitres": 105,
+      "dieselAmount": 9975,
+      "pumpName": "HP Petrol Pump, Lonavala",
+      "driverName": "Rajesh Kumar",
+      "remarks": "Routine supply run",
+      "createdAt": "2026-07-01T15:10:00.000Z",
+      "_id": "6a4773fc4a465f314d8c1f45"
+    }
+  ]
+}

@@ -1,0 +1,30 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" width="100%" height="100%">
+  <defs>
+    <linearGradient id="bg" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#4f46e5" />
+      <stop offset="100%" stop-color="#312e81" />
+    </linearGradient>
+    <linearGradient id="drop" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" stop-color="#38bdf8" />
+      <stop offset="100%" stop-color="#0284c7" />
+    </linearGradient>
+    <filter id="glow" x="-20%" y="-20%" width="140%" height="140%">
+      <feGaussianBlur stdDeviation="15" result="blur" />
+      <feComposite in="SourceGraphic" in2="blur" operator="over" />
+    </filter>
+  </defs>
+  <!-- Background with rounded corners -->
+  <rect width="512" height="512" rx="112" fill="url(#bg)" />
+  
+  <!-- Speedometer Arc -->
+  <path d="M 120 320 A 160 160 0 0 1 392 320" fill="none" stroke="#6366f1" stroke-width="20" stroke-linecap="round" opacity="0.4" />
+  <path d="M 120 320 A 160 160 0 0 1 300 185" fill="none" stroke="#38bdf8" stroke-width="20" stroke-linecap="round" />
+  
+  <!-- Center Fuel Droplet -->
+  <path d="M 256 120 C 256 120 160 260 160 320 C 160 373 203 416 256 416 C 309 416 352 373 352 320 C 352 260 256 120 256 120 Z" fill="url(#drop)" filter="url(#glow)" />
+  
+  <!-- Speedometer Needle pointing up-right -->
+  <line x1="256" y1="320" x2="310" y2="240" stroke="#fbbf24" stroke-width="16" stroke-linecap="round" />
+  <!-- Center Pin -->
+  <circle cx="256" cy="320" r="16" fill="#ffffff" />
+</svg>

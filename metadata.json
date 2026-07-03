@@ -1,0 +1,6 @@
+{
+  "name": "Fuel Management System",
+  "description": "A secure full-stack fuel tracking dashboard with admin metrics, vehicle CRUD, user management, and Excel reporting.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}
