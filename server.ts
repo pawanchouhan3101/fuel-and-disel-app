@@ -5,7 +5,7 @@ import * as XLSX from 'xlsx';
 import { getDb, updateDb, User, Vehicle, FuelEntry, getDbStatus } from './src/db/db.js';
 
 const app = express();
-const PORT = 3000;
+const PORT = process.env.PORT ? Number(process.env.PORT) : 3000;
 
 app.use(express.json());
 
@@ -780,9 +780,11 @@ app.get('/api/reports/excel', requireAuth, (req: AuthenticatedRequest, res) => {
 
 // --- VITE MIDDLEWARE SETUP ---
 
-const isProduction = process.env.NODE_ENV === 'production' || !!process.env.VERCEL;
+const distPath = path.join(process.cwd(), 'dist');
+const isBuiltOutput = process.argv[1] && path.normalize(process.argv[1]).includes(`${path.sep}dist${path.sep}server.cjs`);
+const isProduction = process.env.NODE_ENV === 'production' || !!process.env.VERCEL || isBuiltOutput;
+
 if (isProduction) {
-  const distPath = path.join(process.cwd(), 'dist');
   app.use(express.static(distPath));
   app.get('*', (req, res) => {
     res.sendFile(path.join(distPath, 'index.html'));
